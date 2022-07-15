@@ -127,6 +127,7 @@ h6 {
     box-shadow: var(--box-shadow-light);
     margin: 20px auto;
     padding: 20px;
+    font-size: var(--font-size-text);
 }
 
 nav {
@@ -175,3 +176,5 @@ button:hover {
 content {
     display: none;
 }
+
+

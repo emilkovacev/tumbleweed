@@ -1,6 +1,24 @@
 from flask import Flask, render_template
 import datetime as dt
-from jinja_markdown import MarkdownExtension
+import re
+
+
+def to_markdown(string):
+    # h1 - h6
+    for i in range(1, 7):
+        string = re.sub(f'^{"#"*i}\\s(.+)', f'<h{i}>\\1</h{i}>', string)
+
+    # italics, bold
+    string = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', string)
+    string = re.sub(r'\*(.+?)\*', r'<i>\1</i>', string)
+
+    # line breaks
+    string = re.sub(r'(.+?)\n\n', r'<p>\1</p>', string, flags=re.DOTALL)
+   
+    # links
+    string = re.sub(r'\[(.+?)\]\((.+?)\)', '<a href="\2">\1</a>', string)
+    return string
+
 
 
 class Post:
@@ -26,8 +44,6 @@ class Blog(Flask):
 
         super(Blog, self).__init__(__name__, *args, **kwargs)
 
-        self.jinja_env.add_extension(MarkdownExtension)
-
         self.add_generic_template(
             path='/', 
             title='Home', 
@@ -38,7 +54,9 @@ class Blog(Flask):
         )
 
     def add(self, title, content, date=dt.datetime.now()):
-        post = Post(title, content, date)
+        print(content)
+        markdown = to_markdown(content)
+        post = Post(title, markdown, date)
         self.posts.append(post)
 
     def add_generic_template(self, path, title, template, **kwargs):
