@@ -4,19 +4,28 @@ import re
 
 
 def to_markdown(string):
+
+    string = re.sub(r'^\s*', '', string)
+
+    print(string)
+
+    # list
+    string = re.sub(r'(\d\.\s)(.+)', r'<p> \1\2</p>', string)
+    string = re.sub(r'[\-\*]\s(.+)', r'<p>• \1</p>', string)
+
     # h1 - h6
     for i in range(1, 7):
         string = re.sub(f'^{"#"*i}\\s(.+)', f'<h{i}>\\1</h{i}>', string)
 
     # italics, bold
-    string = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', string)
-    string = re.sub(r'\*(.+?)\*', r'<i>\1</i>', string)
+    string = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', string, re.DOTALL)
+    string = re.sub(r'\*(.+?)\*', r'<i>\1</i>', string, re.DOTALL)
 
     # line breaks
     string = re.sub(r'(.+?)\n\n', r'<p>\1</p>', string, flags=re.DOTALL)
    
     # links
-    string = re.sub(r'\[(.+?)\]\((.+?)\)', '<a href="\2">\1</a>', string)
+    string = re.sub(r'\[(.+?)\]\((.+?)\)', r'<a href="\2">\1</a>', string)
     return string
 
 
@@ -43,6 +52,7 @@ class Blog(Flask):
         self.posts = []
 
         super(Blog, self).__init__(__name__, *args, **kwargs)
+
 
         self.add_generic_template(
             path='/', 

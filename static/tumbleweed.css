@@ -37,7 +37,7 @@
 
 body {
     font-family: var(--font-family);
-    font-size: var(--font-size-medium);
+    font-size: var(--font-size-text);
 }
 
 h1,h2,h3,h4,h5,h6,p,display,description {
@@ -46,7 +46,8 @@ h1,h2,h3,h4,h5,h6,p,display,description {
 }
 
 p {
-    margin-block-end: 1rem;
+    margin-block-start: 0.5rem;
+    margin-block-end: 0.5rem;
 }
 
 display {
@@ -175,6 +176,7 @@ button:hover {
 
 content {
     display: none;
+    font-size: var(--font-size-text);
 }
 
 
